@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"os"
 	"waysbooks/database"
 	"waysbooks/pkg/mysql"
 	"waysbooks/routes"
@@ -11,6 +13,7 @@ import (
 )
 
 func main() {
+
 	errEnv := godotenv.Load()
 	if errEnv != nil {
 		panic("Failed to load env file")
@@ -28,11 +31,10 @@ func main() {
 	database.RunMigration()
 
 	routes.RouteInit(e.Group("/api/v1"))
-
 	e.Static("/uploads", "./uploads")
 
-	// PORT := os.Getenv("PORT")
-	PORT := "5000"
-	e.Logger.Fatal(e.Start("localhost:" + PORT))
-	// e.Logger.Fatal(e.Start(":" + PORT))
+	var PORT = os.Getenv("PORT")
+
+	fmt.Println("server running localhost:" + PORT)
+	e.Logger.Fatal(e.Start(":" + PORT)) // delete localhost
 }
